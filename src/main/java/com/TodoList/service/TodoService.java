@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoService {
@@ -36,5 +37,19 @@ public class TodoService {
     public void createDemoDb(){
         repo.save(new Todolist("Coding","Work on the Sample spring boot project",false));
         repo.save(new Todolist("Exercise","Wakeup early and start doing exercise", true));
+    }
+
+    public String updateTodo(int id, Todolist todo) {
+        Optional<Todolist> optionaltodo=repo.findById(id);
+        Todolist oldtodo;
+        if(optionaltodo.isEmpty()){
+            return "Todo list doesn't exist";
+        }
+        oldtodo=optionaltodo.get();
+        oldtodo.setTitle(todo.getTitle());
+        oldtodo.setDescription(todo.getDescription());
+        oldtodo.setCompleted(todo.getCompleted());
+        repo.save(oldtodo);
+        return " Todo list Updated successfully";
     }
 }
